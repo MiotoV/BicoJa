@@ -1,23 +1,18 @@
-# Variáveis de ambiente com senhas e chaves: nunca subir
 .env
 
-# Python
 __pycache__/
 *.pyc
 .venv/
 .pytest_cache/
 .ruff_cache/
 
-# Arquivos gerados pelo Django
 staticfiles/
 media/
 
-# Node (app e web, nas próximas etapas)
 node_modules/
 .next/
 .expo/
 
-# Sistema operacional e editores
 .DS_Store
 Thumbs.db
 .idea/
