@@ -50,7 +50,17 @@ No Windows, mantenha o projeto dentro do Ubuntu (ex.: `~/projetos/BicoJa`), não
    docker compose exec api python manage.py check
    ```
 
-A API fica disponível em http://localhost:8000.
+6. Crie as tabelas, rode os testes e crie o seu usuário administrador (login por e-mail):
+
+   ```bash
+   docker compose exec api python manage.py migrate
+   docker compose exec api python manage.py test
+   docker compose exec api python manage.py createsuperuser
+   ```
+
+A API fica disponível em http://localhost:8000 e o painel em `http://localhost:8000/<DJANGO_ADMIN_URL>`, com o endereço definido no `.env`.
+
+Para desenvolver com o VS Code, veja o `CONTRIBUTING.md` (Dev Container).
 
 ## Comandos úteis
 
@@ -68,14 +78,31 @@ A API fica disponível em http://localhost:8000.
 
 ```
 BicoJa/
-├── .env.example        # modelo das variáveis de ambiente
-├── docker-compose.yml  # serviços: banco (db) e API (api)
+├── .devcontainer/        # ambiente do VS Code dentro do contêiner
+├── .env.example          # modelo das variáveis de ambiente
+├── docker-compose.yml    # serviços: banco (db) e API (api)
 └── backend/
     ├── Dockerfile
-    ├── requirements.txt
+    ├── requirements.in   # bibliotecas escolhidas (editar aqui)
+    ├── requirements.txt  # lock com versões exatas e hashes (gerado)
     ├── manage.py
-    └── config/         # configurações, rotas e pontos de entrada do Django
+    ├── config/           # configurações, rotas e pontos de entrada do Django
+    └── contas/           # identidade e acesso: usuário, login por e-mail
 ```
+
+## Dependências
+
+As bibliotecas ficam travadas com versão exata e hash em `backend/requirements.txt`, gerado a partir de `backend/requirements.in`. Para adicionar ou atualizar uma biblioteca:
+
+1. Edite `backend/requirements.in`.
+2. Gere o lock de novo, no terminal do Dev Container (em `backend/`):
+
+   ```bash
+   pip install --user pip-tools
+   python -m piptools compile --generate-hashes --strip-extras -o requirements.txt requirements.in
+   ```
+
+3. Faça **Dev Containers: Rebuild Without Cache Container** e commite os dois arquivos.
 
 ## Padrões do projeto
 
